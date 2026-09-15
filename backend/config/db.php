@@ -2,7 +2,10 @@
 /**
  * Database Configuration File
  * DCROP System - backend/config/db.php
- * PDO connection for MySQL database on XAMPP
+ * PDO connection for MySQL database
+ *
+ * Credentials are read from environment variables so secrets are
+ * never committed. Falls back to a local XAMPP-style dev default.
  */
 
 class Database {
@@ -14,6 +17,13 @@ class Database {
     private $charset = "utf8mb4";
     
     public $conn;
+    
+    public function __construct() {
+        $this->host = getenv("DCROP_DB_HOST") ?: "localhost";
+        $this->db_name = getenv("DCROP_DB_NAME") ?: "dcrop_db";
+        $this->username = getenv("DCROP_DB_USER") ?: "root";
+        $this->password = getenv("DCROP_DB_PASS") ?: "";
+    }
     
     /**
      * Get database connection
